@@ -7,14 +7,24 @@
 
   --color-text-primary: #171717;
   --color-text-secondary: #808080;
+
+  /* 모바일 여백 */
+  --spacing-main: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    /* 데스크탑 여백 (1440px)*/
+    --spacing-main: 5rem;
+  }
 }
 
 @theme inline {
   --color-background: var(--color-background);
   --color-brand: var(--color-brand);
   --color-header: var(--color-header);
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
+  --color-primary: var(--color-text-primary);
+  --color-secondary: var(--color-text-secondary);
 
   --text-h-96: 6rem;
   --text-h-64: 4rem;
@@ -23,10 +33,16 @@
   --text-b-16: 1rem;
 
   --font-sans: var(--font-pretendard);
+
+  --breakpoint-max: 1440px;
+
+  --spacing-main: var(--spacing-main);
 }
 
-body {
-  background: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: var(--font-pretendard);
+@layer base {
+  body {
+    @apply bg-background text-primary font-sans antialiased;
+    margin: 0;
+    padding: 0;
+  }
 }
