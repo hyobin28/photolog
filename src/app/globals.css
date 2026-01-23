@@ -7,6 +7,7 @@
 
   --color-text-primary: #171717;
   --color-text-secondary: #808080;
+  --color-border: #d6d6d6;
 
   /* 모바일 여백 */
   --spacing-main: 1.5rem;
@@ -25,7 +26,7 @@
   --color-header: var(--color-header);
   --color-primary: var(--color-text-primary);
   --color-secondary: var(--color-text-secondary);
-
+  --color-border: var(--color-border);
   --text-h-96: 6rem;
   --text-h-64: 4rem;
   --text-b-32: 2rem;
