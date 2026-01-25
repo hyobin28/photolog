@@ -3,6 +3,7 @@
 :root {
   --color-background: #fcfaf8;
   --color-brand: #554d44;
+  --color-brand-dark: #454039;
   --color-header: #f5f2f0;
 
   --color-text-primary: #171717;
@@ -23,6 +24,7 @@
 @theme inline {
   --color-background: var(--color-background);
   --color-brand: var(--color-brand);
+  --color-branddark: var(--color-brand-dark);
   --color-header: var(--color-header);
   --color-primary: var(--color-text-primary);
   --color-secondary: var(--color-text-secondary);
