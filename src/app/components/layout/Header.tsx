@@ -2,6 +2,8 @@ import Link from 'next/link'
 
 import { Menu } from 'lucide-react'
 
+import Button from '../common/Button/Button'
+
 const Header = () => {
   return (
     <header className="relative w-full h-17 flex items-center justify-between px-main bg-header border-b border-border">
@@ -37,12 +39,7 @@ const Header = () => {
           >
             로그인
           </Link>
-          <Link
-            href="/signup"
-            className="text-brand hover:opacity-80 transition-opacity"
-          >
-            시작하기
-          </Link>
+          <Button size="s">시작하기</Button>
         </div>
 
         {/* 모바일 아이콘 */}
