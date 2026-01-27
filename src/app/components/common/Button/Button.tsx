@@ -3,6 +3,7 @@ type ButtonProps = {
   size: 's' | 'm' | 'l'
   onClick?: () => void
   className?: string
+  textClassName?: string
   children: string
 }
 
@@ -11,6 +12,7 @@ const Button = ({
   size,
   onClick,
   className,
+  textClassName,
   children,
 }: ButtonProps) => {
   const base =
@@ -32,7 +34,7 @@ const Button = ({
       onClick={onClick}
       className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
     >
-      {children}
+      <span className={textClassName}>{children}</span>
     </button>
   )
 }

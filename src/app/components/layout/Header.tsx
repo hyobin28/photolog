@@ -10,7 +10,7 @@ const Header = () => {
       {/* 로고 */}
       <Link href="/" className="flex items-center gap-2">
         <div className="w-7 h-7 rounded-full bg-brand" />
-        <span className="text-b-24 font-semibold tracking-tight">Photolog</span>
+        <span className="text-b-24 font-medium">Photolog</span>
       </Link>
 
       {/* 데스크탑 메뉴 */}

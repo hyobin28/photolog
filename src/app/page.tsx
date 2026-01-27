@@ -32,21 +32,23 @@ export default function Home() {
   return (
     <main className="min-h-screen px-main py-10 lg:py-20">
       <section>
-        <h1 className="text-4xl lg:text-h-96 text-brand leading-tight tracking-tighter">
+        <h1 className="text-4xl lg:text-h-64 text-primary font-light leading-tight tracking-tighter">
           사진으로 기록하는
           <br className="hidden lg:block" />
           특별한 순간
         </h1>
 
-        <p className="text-b-16 lg:text-b-24 text-secondary mt-6 max-w-150">
+        <p className="text-b-16 lg:text-b-24 text-secondary mt-6 max-w-150 font-light">
           단순한 사진 모음이 아닌, 여행과 일상의 특별한 순간을
           <br className="hidden lg:block" />
           하나의 결과물로 정리하는 개인 아카이브 서비스입니다.
         </p>
 
         <div className="mt-7.5 flex gap-3">
-          <Button size="m">시작하기</Button>
-          <Button variant="outline" size="m">
+          <Button size="m" textClassName="font-light">
+            시작하기
+          </Button>
+          <Button variant="outline" size="m" textClassName="font-light">
             둘러보기
           </Button>
         </div>
