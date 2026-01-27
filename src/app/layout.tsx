@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
+import Footer from './components/layout/Footer'
 import Header from './components/layout/Header'
 import './globals.css'
 
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={`${pretendard.className} antialiased`}>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   )
