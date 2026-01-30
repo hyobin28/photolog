@@ -26,7 +26,7 @@ const Button = ({
   const sizes = {
     s: 'px-4 py-2 h-[35px] min-w-[80px] text-b-16 rounded-[8px]',
     m: 'px-6 py-3 h-[66px] w-[187px] text-b-32 rounded-[14px]',
-    l: 'h-[64px] py-4 text-b-24 rounded-[16px] w-full max-w-[411px]',
+    l: 'h-[57px] py-4 text-b-24 rounded-[12px] w-full max-w-[411px]',
   }
 
   return (
