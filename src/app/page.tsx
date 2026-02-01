@@ -1,4 +1,4 @@
-import Button from './components/common/Button/Button'
+import Button from './components/common/Button'
 import PostCard from './components/common/Dummy/PostCard/PostCard'
 
 const DUMMY_POSTS = [
