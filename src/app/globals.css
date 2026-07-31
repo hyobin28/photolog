@@ -1,26 +1,51 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-background: #fcfaf8;
+  --color-brand: #554d44;
+  --color-brand-dark: #454039;
+  --color-header: #f5f2f0;
+
+  --color-text-primary: #171717;
+  --color-text-secondary: #808080;
+  --color-border: #d6d6d6;
+
+  /* 모바일 여백 */
+  --spacing-main: 1.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-pretendard);
-  --font-mono: var(--font-pretendard);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 1024px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* 데스크탑 여백 (1440px)*/
+    --spacing-main: 5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-pretendard);
+@theme inline {
+  --color-background: var(--color-background);
+  --color-brand: var(--color-brand);
+  --color-branddark: var(--color-brand-dark);
+  --color-header: var(--color-header);
+  --color-primary: var(--color-text-primary);
+  --color-secondary: var(--color-text-secondary);
+  --color-border: var(--color-border);
+  --text-h-96: 6rem;
+  --text-h-64: 4rem;
+  --text-b-32: 2rem;
+  --text-b-24: 1.5rem;
+  --text-b-16: 1rem;
+
+  --font-sans: var(--font-pretendard);
+
+  --breakpoint-max: 1440px;
+
+  --spacing-main: var(--spacing-main);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-primary font-sans antialiased;
+    margin: 0;
+    padding: 0;
+  }
 }

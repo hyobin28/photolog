@@ -1,65 +1,80 @@
-import Image from "next/image";
+import Button from './components/common/Button'
+import PostCard from './components/common/Dummy/PostCard/PostCard'
+
+const DUMMY_POSTS = [
+  {
+    id: 1,
+    title: '제주도 겨울 바다',
+    location: '제주 애월',
+    date: '2026.01.02',
+    bgColor: 'bg-blue-100',
+    count: 5,
+  },
+  {
+    id: 2,
+    title: '경복궁 설경',
+    location: '서울 경복궁',
+    date: '2025.12.28',
+    bgColor: 'bg-slate-200',
+    count: 4,
+  },
+  {
+    id: 3,
+    title: '부산 감천문화마을',
+    location: '부산 감천동',
+    date: '2025.12.15',
+    bgColor: 'bg-orange-100',
+    count: 3,
+  },
+]
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen px-main py-10 lg:py-20">
+      <section>
+        <h1 className="text-4xl lg:text-h-64 text-primary font-light leading-tight tracking-tighter">
+          사진으로 기록하는
+          <br className="hidden lg:block" />
+          특별한 순간
+        </h1>
+
+        <p className="text-b-16 lg:text-b-24 text-secondary mt-6 max-w-150 font-light">
+          단순한 사진 모음이 아닌, 여행과 일상의 특별한 순간을
+          <br className="hidden lg:block" />
+          하나의 결과물로 정리하는 개인 아카이브 서비스입니다.
+        </p>
+
+        <div className="mt-7.5 flex gap-3">
+          <Button size="m" textClassName="font-light">
+            시작하기
+          </Button>
+          <Button variant="outline" size="m" textClassName="font-light">
+            둘러보기
+          </Button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="mt-25">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="text-b-24">공개된 기록들</h2>
+            <p className="text-b-16 mt-0.5 text-secondary">
+              사용자들이 공유한 특별한 순간들을 둘러보세요
+            </p>
+          </div>
+          <button className="group text-b-16 text-secondary hover:text-primary flex items-center gap-1 transition-colors">
+            모두 보기
+            <span className="group-hover:translate-x-1 transition-transform">
+              →
+            </span>
+          </button>
         </div>
-      </main>
-    </div>
-  );
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {DUMMY_POSTS.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      </section>
+    </main>
+  )
 }
