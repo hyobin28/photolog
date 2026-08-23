@@ -1,8 +1,13 @@
 'use client'
 
-import Button from '../components/common/Button/Button'
+import { useState } from 'react'
+
+import Button from '../components/common/Button'
+import ImagePicker from '../components/common/ImagePicker'
 
 const WritePage = () => {
+  const [imagePaths, setImagePaths] = useState<string[]>([])
+
   return (
     <main className="min-h-screen px-main py-10 lg:py-20 max-w-200 mx-auto">
       {/* 헤더 영역 */}
@@ -19,9 +24,9 @@ const WritePage = () => {
           <label className="text-b-16 font-bold text-primary">
             사진(최대 5장) <span className="text-brand">*</span>
           </label>
-          <div className="aspect-21/9 border border-gray-200 rounded-[12px] flex items-center justify-center cursor-pointer transition-colors">
-            {/* 이미지 미리보기 로직 */}
-          </div>
+          {/* <div className="aspect-21/9 border border-gray-200 rounded-[12px] flex items-center justify-center cursor-pointer transition-colors">
+          </div> */}
+          <ImagePicker name="images" onChange={setImagePaths} />
         </div>
 
         {/* 제목 입력 */}
@@ -32,7 +37,7 @@ const WritePage = () => {
           <input
             type="text"
             placeholder="이 순간을 한 줄로 표현해보세요"
-            className="w-full px-4 py-3 border border-gray-200 rounded-[8px] focus:outline-none focus:border-brand"
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-brand"
           />
         </div>
 
@@ -41,7 +46,7 @@ const WritePage = () => {
           <label className="text-b-16 font-bold text-gray-900">설명</label>
           <textarea
             rows={5}
-            className="w-full px-4 py-3 border border-gray-200 rounded-[8px] focus:outline-none focus:border-brand resize-none"
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-brand resize-none"
           />
         </div>
 
@@ -54,7 +59,7 @@ const WritePage = () => {
             <input
               type="text"
               placeholder="예) 제주 해안도로"
-              className="w-full px-4 py-3 border border-gray-200 rounded-[8px] focus:outline-none focus:border-brand"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-brand"
             />
           </div>
           <div className="flex flex-col gap-3">
@@ -64,7 +69,7 @@ const WritePage = () => {
             <input
               type="text"
               placeholder="연도.월.일"
-              className="w-full px-4 py-3 border border-gray-200 rounded-[8px] focus:outline-none focus:border-brand"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-brand"
             />
           </div>
         </div>
@@ -75,7 +80,7 @@ const WritePage = () => {
           <input
             type="text"
             placeholder="쉼표로 구분하세요 (예: 여행, 제주도, 바다)"
-            className="w-full px-4 py-3 border border-gray-200 rounded-[8px] focus:outline-none focus:border-brand"
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-brand"
           />
         </div>
 
