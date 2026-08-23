@@ -151,7 +151,62 @@ src/app/
 
 ---
 
-## 8. 기록(Post) 스펙
+## 8. Storage 설계
+
+### 버킷
+
+- 이름: `post-images`
+- Public: **OFF (private)**
+  - 이유: 버킷을 public으로 두면 URL만 알아도 이미지에 접근 가능해져, "타인 비공개 기록은 조회 불가"라는 7번 권한 구분과 어긋남
+- 경로 규칙: `{user_id}/{파일명}`
+  - RLS 정책에서 경로의 첫 세그먼트를 `auth.uid()`와 비교해 소유자를 판별하기 위함
+
+### RLS 정책 (owner-only)
+
+현재는 업로드한 본인만 자신의 파일을 조회/수정/삭제할 수 있도록 제한한다.
+"공개로 설정한 기록의 이미지를 타인도 볼 수 있게" 하는 부분은 posts 테이블 설계 이후, SSR인 기록 상세 페이지(5번 렌더링 전략 참고)에서 signed URL을 발급하는 방식으로 확장할 예정이며, 버킷 자체는 계속 private로 유지한다.
+
+```sql
+-- 업로드 (본인 폴더에만)
+create policy "post-images insert own folder"
+on storage.objects for insert
+to authenticated
+with check (
+  bucket_id = 'post-images'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- 조회 (본인 것만)
+create policy "post-images select own folder"
+on storage.objects for select
+to authenticated
+using (
+  bucket_id = 'post-images'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- 수정
+create policy "post-images update own folder"
+on storage.objects for update
+to authenticated
+using (
+  bucket_id = 'post-images'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- 삭제
+create policy "post-images delete own folder"
+on storage.objects for delete
+to authenticated
+using (
+  bucket_id = 'post-images'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
+```
+
+---
+
+## 9. 기록(Post) 스펙
 
 ### 기록 단위 정의
 
@@ -175,7 +230,7 @@ src/app/
 
 ---
 
-## 9. MVP 범위
+## 10. MVP 범위
 
 ### ✅ 완료
 
@@ -213,7 +268,7 @@ src/app/
 
 ---
 
-## 10. SEO / 공유
+## 11. SEO / 공유
 
 - 개인 접근 중심 서비스 (MVP)
 - 외부 공유가 의미 있는 페이지: 공개 설정된 기록 상세 페이지
@@ -221,7 +276,7 @@ src/app/
 
 ---
 
-## 11. Claude Code 협업 규칙
+## 12. Claude Code 협업 규칙
 
 1. **코드 먼저 짜달라고 하지 않는다.**
    내가 먼저 생각하고 → Claude Code에게 피드백 요청하는 순서로 진행한다.
@@ -238,7 +293,7 @@ src/app/
 
 ---
 
-## 12. Claude Code 시작 방법
+## 13. Claude Code 시작 방법
 
 ### 새 대화 시작할 때마다
 
