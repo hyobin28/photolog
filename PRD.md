@@ -149,6 +149,42 @@ src/app/
 | 조회      | ✅      | ✅             | ❌               |
 | 수정/삭제 | ✅      | ❌             | ❌               |
 
+### 프로필 테이블 (profiles)
+
+- 회원가입 시 이메일/비밀번호와 함께 닉네임을 입력받는다.
+- 닉네임은 커뮤니티 페이지 등에서 타인에게 노출되는 공개 식별자이므로 이메일 대신 사용하고, 중복을 허용하지 않는다.
+- `auth.users`와 1:1 관계이며 별도 FK 컬럼 없이 `id`를 그대로 공유한다.
+
+```sql
+create table profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  nickname text not null unique,
+  created_at timestamptz not null default now()
+);
+
+alter table profiles enable row level security;
+
+create policy "profiles select all" on profiles
+  for select to authenticated using (true);
+
+create policy "profiles update own" on profiles
+  for update to authenticated using (auth.uid() = id);
+
+-- 회원가입 시 auth.users에 들어온 nickname 메타데이터로 profiles 행 자동 생성
+create function handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, nickname)
+  values (new.id, new.raw_user_meta_data->>'nickname');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function handle_new_user();
+```
+
 ---
 
 ## 8. Storage 설계
@@ -176,14 +212,22 @@ with check (
   and (storage.foldername(name))[1] = auth.uid()::text
 );
 
--- 조회 (본인 것만)
-create policy "post-images select own folder"
-on storage.objects for select
-to authenticated
-using (
-  bucket_id = 'post-images'
-  and (storage.foldername(name))[1] = auth.uid()::text
-);
+-- 조회
+drop policy if exists "post-images select own folder" on storage.objects;
+
+create policy "post-images select own or public post" on storage.objects
+  for select to authenticated
+  using (
+    bucket_id = 'post-images'
+    and (
+      (storage.foldername(name))[1] = auth.uid()::text
+      or exists (
+        select 1 from posts
+        where storage.objects.name = any(posts.image_paths)
+          and posts.is_public = true
+      )
+    )
+  );
 
 -- 수정
 create policy "post-images update own folder"
@@ -228,6 +272,41 @@ using (
 - 업로드 실패 시 해당 사진만 재시도 가능 (전체 작성 막으면 안 됨)
 - 저장 완료 후 → 기록 상세 페이지로 이동
 
+### 테이블 설계 (posts)
+
+- `image_paths`는 Storage 경로(`{user_id}/{파일명}`, 8번 참고) 배열
+- 장소(`location`)는 MVP 제외 — 위 10번 참고
+
+```sql
+create table posts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  title text not null,
+  content text,
+  image_paths text[] not null,
+  tags text[] default '{}',
+  event_date date,
+  is_public boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table posts enable row level security;
+
+create policy "posts select own or public" on posts
+  for select to authenticated
+  using (auth.uid() = user_id or is_public = true);
+
+create policy "posts insert own" on posts
+  for insert to authenticated with check (auth.uid() = user_id);
+
+create policy "posts update own" on posts
+  for update to authenticated using (auth.uid() = user_id);
+
+create policy "posts delete own" on posts
+  for delete to authenticated using (auth.uid() = user_id);
+```
+
 ---
 
 ## 10. MVP 범위
@@ -244,18 +323,18 @@ using (
 - 글 작성 페이지 (UI)
 - 헤더/푸터/버튼 공통 컴포넌트
 - 반응형 설정
+- DB 설계 및 적용 (profiles, posts 테이블 + RLS, 7/9번 참고)
+- 공개/비공개 권한 처리 (RLS)
 
 ### 🔄 진행 중
 
 - 이미지 업로드 (Supabase Storage 연결 필요)
+- 인증 흐름 (로그인/로그아웃/세션 유지)
 
 ### ⬜ 시작 전
 
-- DB 설계 (Supabase 테이블/RLS)
-- 인증 흐름 (로그인/로그아웃/세션 유지)
 - 글 목록 페이지 (URL 상태 기반 필터/정렬)
 - 글 상세 페이지 (SSR + 메타데이터)
-- 공개/비공개 권한 처리 (RLS)
 - 커뮤니티 페이지
 - 마이페이지
 - 배포 (Vercel)
@@ -264,6 +343,7 @@ using (
 
 - 타임라인 뷰
 - 지도 뷰
+- 장소 기반 탐색 — 장소별로 공개 기록/사진 모아보기 (`write` 페이지의 "장소" 입력 필드는 이 기능을 위한 것이나, MVP의 `posts` 테이블에는 컬럼을 두지 않음)
 - (단, 동일한 데이터로 확장 가능하도록 구조는 열어둠)
 
 ---
